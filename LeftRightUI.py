@@ -29,7 +29,7 @@ now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 #プロンプトテンプレートを作成
 template = """
 あなたは聞かれた質問に答える優秀なアシスタントです。
-語尾にござるをつけて回答してください。
+文頭に、にゃんぱす～をつけて回答してください。
 """
 
 # 会話のテンプレートを作成
@@ -118,7 +118,7 @@ if user_number:
     st.write(f"こんにちは、{user_number}さん！")
     # 初期済みでない場合は初期化処理を行う
     if not firebase_admin._apps:
-            cred = credentials.Certificate('chatapp-509c9-firebase-adminsdk-5tvj9-9106d52707.json') 
+            cred = credentials.Certificate('chat7-46bf4-firebase-adminsdk-88x05-e6644057ac.json') 
             default_app = firebase_admin.initialize_app(cred)
     db = firestore.client()
     #doc_ref = db.collection(user_number)
