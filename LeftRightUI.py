@@ -147,14 +147,12 @@ def on_input_change():
     #    api_user_message = st.session_state.user_message
 
     user_message = st.session_state.user_message
-    st.session_state.past.append(user_message)
     conversation = load_conversation()
-    answer = conversation.predict(input=user_message)
+    with st.spinner("入力中。。。"):
+        time.sleep(5)
+        answer = conversation.predict(input=user_message)
     st.session_state.generated.append(answer)
-    #with st.spinner("入力中。。。"):
-            # 任意時間入力中のスピナーを長引かせたい場合はこちら！
-    time.sleep(1)
-    #st.session_state.past.append(user_message)
+    st.session_state.past.append(user_message)
 
     st.session_state.user_message = ""
     Human_Agent = "Human" 
