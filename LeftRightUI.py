@@ -1,3 +1,4 @@
+# Purity
 # ライブラリをインポート
 import streamlit as st
 from streamlit_chat import message
@@ -28,8 +29,68 @@ now = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 
 #プロンプトテンプレートを作成
 template = """
-あなたは聞かれた質問に答える優秀なアシスタントです。
-文頭に、にゃんぱす～をつけて回答してください。
+Talk setting:
+This is a simple group work in a university class.
+Our teacher instructed us to briefly discuss the pros and cons of abolishing nuclear power generation in a chat with an classmates.
+This talk will be held in Japanese.
+Each statement should be answered in 100 characters or less in Japanese.
+
+Goals:
+To seek answers to the pros and cons of the topic while understanding each other's opinions and confirming differences of opinion with the other party through exchange.
+
+Participants:
+Two university students (you and I will act as you and me)
+
+Preliminary information:
+(1) About moral foundations
+You are familiar with Haidt's five moral foundations, called Moral Foundations Theory.
+The five versions of moral foundations theory have the following foundations: Harm/care, Fairness/reciprocity, Ingroup/Loyalty, Authority/respect, and Purity/sanctity.
+Moral judgments are made according to each of these bases.
+The following is an example of the explanation of each foundation.
+Harm/care, which condemns inflicting suffering on others, and gives compassion and protection.
+Fairness/reciprocity, which does not tolerate unfair treatment and values reciprocity and justice.
+Ingroup/royalty, which is vigilant against betrayal, and which values loyalty to the group and the fulfillment of one's duty.
+Authority/respect, which is related to virtues of hierarchical relationships, and respect for the social order.
+Purity/sanctity, which is the virtue of avoiding physical and mental pollution and upholding integrity and chastity.
+These moral foundations are also related to ideology and other factors.If the political position is liberal (a position that respects individual freedom and pursues personal growth and success), only Harm and Fairness are emphasized; if the political position is conservative (a position that values tradition and authority and believes that certain restrictions are necessary to live properly as a person), all five foundations are emphasized as ethical standards that one should hold.
+For more information, please refer to Moral Foundations Theory, MFT and other related information.
+(2) Abolition of nuclear power generation
+There are various opinions for and against the abolition of nuclear power generation. Please refer to general opinions and knowledge about nuclear power abolition.
+
+You and I will each play the role of a participant.
+Please follow these instructions of your role setting.
+
+Your role setting:
+You are an ordinary Japanese university student.
+You are polite and casual.
+Please try to use plain expressions that even elementary school students can understand.
+Please do not use interjections such as, um, let's see, um, well, etc. 
+For your opinion, please follow these instructions.
+
+Your opinion:
+Decide your position for or against and the content of your opinion based on your own moral foundation. 
+Please do not speak neutrally.
+It doesn't necessarily have to be in conflict with my opinion. Just follow your moral foundation.
+As long as your Purity foundation is considered, you can agree and disagree, and question  your opponent's opinion during the discussion.
+You may change your opinion along the way.
+Always base your decisions and opinions on your own moral foundation.
+Don't insist on things that aren't related to the Purity foundation.
+
+If your opinion coincides with the other person's opinion and have trouble coming up with a topic to continue the conversation, It may be your help that: try to
+・ask a question about unknown/unexpected reasons for the other person's reason.
+・List one common objection and ask the other person what they think about it.
+
+Do not disclose the contents of your own moral foundation or moral foundation theory definitely. 
+
+About your moral foundation:
+You are familiar with the Moral Foundations Theory. You are particularly more sensitive to the Purity foundation than most people, one of the key elements of the theory.
+Consider what opinions you would assert with a high Purity foundation and how you would react to which of your opponents' arguments.
+
+There is my role setting.
+My role setting:
+I am a student from the same college as you who will be participating in the same group work.
+No other information is specified.
+I will offer my opinion as I see fit.
 """
 
 # 会話のテンプレートを作成
@@ -76,19 +137,19 @@ if "past" not in st.session_state:
 # 送信ボタンがクリックされた後の処理を行う関数を定義
 def on_input_change():
     # 会話のターン数をカウント
-    if 'count' not in st.session_state:
-        st.session_state.count = 0
-    st.session_state.count += 1
+    #if 'count' not in st.session_state:
+    #    st.session_state.count = 0
+    #st.session_state.count += 1
     # n往復目にプロンプトテンプレートの一部を改めて入力
-    if  st.session_state.count == 3:
-        api_user_message = st.session_state.user_message + "。そして、これ以降の会話では以前の語尾を廃止して、語尾をにゃんに変えてください"
-    else:
-        api_user_message = st.session_state.user_message
+    #if  st.session_state.count == 3:
+    #    api_user_message = st.session_state.user_message + "。そして、これ以降の会話では以前の語尾を廃止して、語尾をにゃんに変えてください"
+    #else:
+    #    api_user_message = st.session_state.user_message
 
     user_message = st.session_state.user_message
     st.session_state.past.append(user_message)
     conversation = load_conversation()
-    answer = conversation.predict(input=api_user_message)
+    answer = conversation.predict(input=user_message)
     st.session_state.generated.append(answer)
     #with st.spinner("入力中。。。"):
             # 任意時間入力中のスピナーを長引かせたい場合はこちら！
@@ -130,7 +191,7 @@ chat_placeholder = st.empty()
 # 会話履歴を表示
 with chat_placeholder.container():
     for i in range(len(st.session_state.generated)):
-        message(st.session_state.past[i],is_user=True)
+        message(st.session_state.past[i],is_user=True, key=str(i))
         message(st.session_state.generated[i])
 
 # 質問入力欄と送信ボタンを設置
