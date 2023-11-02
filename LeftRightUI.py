@@ -133,6 +133,10 @@ if "generated" not in st.session_state:
     st.session_state.generated = []
 if "past" not in st.session_state:
     st.session_state.past = []
+    
+# 会話のターン数をカウント
+if 'count' not in st.session_state:
+    st.session_state.count = 0
 
 # 送信ボタンがクリックされた後の処理を行う関数を定義
 def on_input_change():
@@ -148,7 +152,7 @@ def on_input_change():
 
     user_message = st.session_state.user_message
     conversation = load_conversation()
-    with st.spinner("入力中。。。"):
+    with st.spinner("相手からの返信を待っています。。。"):
         time.sleep(5)
         answer = conversation.predict(input=user_message)
     st.session_state.generated.append(answer)
@@ -174,7 +178,7 @@ def redirect_to_url(url):
 # st.write("議論を行いましょう！")
 user_number = st.text_input("学籍番号を半角で入力してエンターを押してください")
 if user_number:
-    st.write(f"こんにちは、{user_number}さん！")
+    # st.write(f"こんにちは、{user_number}さん！")
     # 初期済みでない場合は初期化処理を行う
     if not firebase_admin._apps:
             cred = credentials.Certificate('chat7-46bf4-firebase-adminsdk-88x05-e6644057ac.json') 
@@ -194,7 +198,10 @@ with chat_placeholder.container():
 
 # 質問入力欄と送信ボタンを設置
 with st.container():
-    user_message = st.text_input("内容を入力して送信ボタンを押してください", key="user_message")
+    if  st.session_state.count == 0:
+        user_message = st.text_input("「原子力発電は廃止すべき」という意見に対して、あなたの意見を入力して送信ボタンを押してください", key="user_message")
+    else:
+        user_message = st.text_input("あなたの意見を入力して送信ボタンを押してください", key="user_message")
     st.button("送信", on_click=on_input_change)
 # 質問入力欄 上とどっちが良いか    
 #if user_message := st.chat_input("聞きたいことを入力してね！", key="user_message"):
