@@ -194,7 +194,8 @@ chat_placeholder = st.empty()
 with chat_placeholder.container():
     for i in range(len(st.session_state.generated)):
         message(st.session_state.past[i],is_user=True, key=str(i))
-        message(st.session_state.generated[i])
+        key_generated = str(i) + "keyg"
+        message(st.session_state.generated[i], key=str(key_generated))
 
 # 質問入力欄と送信ボタンを設置
 with st.container():
