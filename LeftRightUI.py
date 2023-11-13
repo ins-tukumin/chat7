@@ -1,4 +1,4 @@
-# Purity → Individualizing
+# Fairness → binding
 # ライブラリをインポート
 import streamlit as st
 from streamlit_chat import message
@@ -43,7 +43,7 @@ template = """
 会話を終えたら、もう二人が会って話すことはありません。
 
 ゴール：
-私たちの隠れた目的は、お互いの意見を交換し、共通点と相違点を明らかにすることです。積極的に意見を主張したり質問するなどして、自分の道徳観に従って議論してください。
+私たちの隠れた目的は、お互いの意見を交換し、共通点と相違点を明らかにすることです。積極的に意見を主張したり質問したりするなどして、自分の道徳観に従って議論してください。
 
 事前知識：
 ・道徳基盤理論について
@@ -53,19 +53,19 @@ Haidtの道徳基盤理論では5つの基盤が存在します。
 社会問題に関する会話や意見において、道徳基盤は価値判断、意見、他者への反応を決定します。
 
 チャットボットのロール：
-・名前　佐藤
+・名前　鈴木
 ・日本の大学に通う一般的な大学生
 ・｢ですます｣口調で話す
-・原子力発電の廃止に賛成
+・原子力発電の廃止に反対
 上記の設定に加え、この人は、以下のチャットボットの道徳基盤に従って議論をします。
 
 チャットボットの道徳基盤：
-5つの道徳基盤のうち、HarmとFairnessの基盤の感受性が、一般よりも特に高い人です。
-よって個人の福祉と他者の権利を尊重し、他者や社会制度による危害や不当な扱いから個人を守ることに焦点をあてます。
+5つの道徳基盤のうち、IngroupとAuthorityの基盤の感受性が、一般よりも特に高い人です。
+よってより厳格な秩序のある共同体を作るため、美徳や制度を重視し、人々を役割、義務によって拘束する必要があると考えます。
 
 チャットボットの発言について：
 原子力発電廃止に関する価値判断、意見、発言、他者への反応などの会話は、常にチャットボットの道徳基盤に従って行われます。
-自らのHarm、Fairnessの道徳基盤を踏まえ、社会問題と道徳基盤理論に関連する知見に従って会話を行います。
+自らのIngroup、Authorityの道徳基盤を踏まえ、社会問題と道徳基盤理論に関連する知見に従って会話を行います。
 
 私のロール：
 チャットボットの話し相手
@@ -79,7 +79,7 @@ Haidtの道徳基盤理論では5つの基盤が存在します。
 自分の道徳基盤や道徳基盤理論、Moral Foundation Theoryに関することは一切明かさないでください。
 名前を聞かれたら、秘密であると答えてください。
 AIだとばれないよう振る舞ってください。
-もし、私が原子力発電廃止に賛成の立場をとっても、チャットボットも原子力発電廃止に賛成の立場のまま、議論は続けてください。
+もし、私が原子力発電廃止に反対の立場をとっても、チャットボットも原子力発電廃止に反対の立場のまま、議論は続けてください。
 テーマの確認は要りません。
 では、私から話し始めます。
 """
@@ -192,9 +192,12 @@ with chat_placeholder.container():
 with st.container():
     if  st.session_state.count == 0:
         user_message = st.text_input("「原子力発電は廃止すべき」という意見に対して、あなたの意見を入力して送信ボタンを押してください", key="user_message")
+        st.button("送信", on_click=on_input_change)
+    elif st.session_state.count == 5:
+        st.write("意見交換はこれで終了です。URLをクリックしてください。")
     else:
         user_message = st.text_input("あなたの意見を入力して送信ボタンを押してください", key="user_message")
-    st.button("送信", on_click=on_input_change)
+        st.button("送信", on_click=on_input_change)
 # 質問入力欄 上とどっちが良いか    
 #if user_message := st.chat_input("聞きたいことを入力してね！", key="user_message"):
 #    on_input_change()
@@ -204,3 +207,36 @@ redirect_link = "https://nagoyapsychology.qualtrics.com/jfe/form/SV_cw48jqskbAos
 st.markdown(f'<a href="{redirect_link}" target="_blank">5往復のチャットが終了したらこちらを押してください。</a>', unsafe_allow_html=True)
 #if st.button("終了したらこちらを押してください。画面が遷移します。"):
     #redirect_to_url("https://www.google.com")
+    
+hide_streamlit_style = """
+                <style>
+                div[data-testid="stToolbar"] {
+                visibility: hidden;
+                height: 0%;
+                position: fixed;
+                }
+                div[data-testid="stDecoration"] {
+                visibility: hidden;
+                height: 0%;
+                position: fixed;
+                }
+                div[data-testid="stStatusWidget"] {
+                visibility: hidden;
+                height: 0%;
+                position: fixed;
+                }
+                #MainMenu {
+                visibility: hidden;
+                height: 0%;
+                }
+                header {
+                visibility: hidden;
+                height: 0%;
+                }
+                footer {
+                visibility: hidden;
+                height: 0%;
+                }
+                </style>
+                """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
